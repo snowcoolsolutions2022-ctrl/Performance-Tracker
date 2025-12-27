@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Technician {
+  id          Int             @id @default(autoincrement())
+  name        String
+  designation String          // "INSTALL TEAM", "SERVICE TEAM", "MULTI"
+  reports     MonthlyReport[]
+}
+
+model MonthlyReport {
+  id             Int    @id @default(autoincrement())
+  technicianId   Int
+  technician     Technician @relation(fields: [technicianId], references: [id])
+  month          String
+  year           Int
+  
+  // Shared Metrics from reports
+  allocatedCalls Int    @default(0)
+  week1          Int    @default(0)
+  week2          Int    @default(0)
+  week3          Int    @default(0)
+  week4          Int    @default(0)
+  week5          Int    @default(0)
+  totalCompleted Int    @default(0)
+  workingDays    Int    @default(0)
+  completedAverage Float @default(0.0)
+  attendedAverage  Float @default(0.0)
+  completedConversion Float @default(0.0)
+  pendingCalls     Float @default(0.0)
+
+  // Specific Data Relations
+  installDetail     InstallDetail?
+  serviceCategories ServiceCategoryBreakdown[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([technicianId, month, year])
+}
+
+model InstallDetail {
+  id              Int           @id @default(autoincrement())
+  reportId        Int           @unique
+  report          MonthlyReport @relation(fields: [reportId], references: [id])
+
+  // Material Details
+  stand           Int   @default(0)
+  standFixing     Int   @default(0)
+  copperPipe      Float @default(0.0)
+  copperPipeFixing Float @default(0.0)
+  cottonRoll      Int   @default(0)
+  stabilizer      Int   @default(0)
+  
+  // Target
+  amcTarget       Int   @default(0)
+  amcAchieved     Int   @default(0)
+  
+  // Call Breakdown
+  installCount    Int   @default(0)
+  reinstallCount  Int   @default(0)
+  dismantleCount  Int   @default(0)
+}
+
+model ServiceCategoryBreakdown {
+  id           Int           @id @default(autoincrement())
+  reportId     Int
+  report       MonthlyReport @relation(fields: [reportId], references: [id])
+  
+  categoryName String        // "HOOPERWASH", "GAS LEAK", "SERVICE/BRK", etc.
+  inWarranty   Int           @default(0)
+  outWarranty  Int           @default(0)
+  total        Int           @default(0)
+}

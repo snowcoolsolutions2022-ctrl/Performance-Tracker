@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* @theme block removed for IDE compatibility. Configuration moved to tailwind.config.ts */
+
+/* Define the values (HSL format requires 'hsl()' wrapper in v4 if simply passing through, 
+   but ideally we use modern color formats. For now, sticking to simple hex/rgb or just standard palette 
+   to ensure it works involves less config risk. I will use direct colors for variables) */
+
+:root {
+  --background: #020617;
+  /* slate-950 */
+  --foreground: #f8fafc;
+  /* slate-50 */
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  /* slate-800 */
+  border-radius: 9999px;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}

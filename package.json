@@ -1,0 +1,40 @@
+{
+  "name": "tracker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "seed": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" prisma/seed.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "@prisma/adapter-libsql": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.562.0",
+    "next": "16.1.1",
+    "prisma": "^7.2.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "recharts": "^3.6.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20.19.27",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.1",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
