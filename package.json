@@ -10,15 +10,13 @@
     "seed": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" prisma/seed.ts"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.15",
-    "@prisma/adapter-libsql": "^7.2.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^5.22.0",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
-    "prisma": "^7.2.0",
+    "prisma": "^5.22.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.6.0",
