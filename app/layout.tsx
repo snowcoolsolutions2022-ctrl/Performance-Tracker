@@ -18,12 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${inter.variable}`} suppressHydrationWarning>
       <body className="bg-slate-950 text-slate-100 min-h-screen flex antialiased">
         <Sidebar />
         <main className="flex-1 overflow-y-auto h-screen p-6 relative">
-             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-10" />
-            {children}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black -z-10" />
+          {children}
         </main>
         <Toaster position="top-right" theme="dark" />
       </body>

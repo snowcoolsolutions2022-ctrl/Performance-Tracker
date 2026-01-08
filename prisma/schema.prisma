@@ -6,7 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Technician {
@@ -24,14 +26,14 @@ model MonthlyReport {
   year           Int
   
   // Shared Metrics from reports
-  allocatedCalls Int    @default(0)
-  week1          Int    @default(0)
-  week2          Int    @default(0)
-  week3          Int    @default(0)
-  week4          Int    @default(0)
-  week5          Int    @default(0)
-  totalCompleted Int    @default(0)
-  workingDays    Int    @default(0)
+  allocatedCalls Float    @default(0.0)
+  week1          Float    @default(0.0)
+  week2          Float    @default(0.0)
+  week3          Float    @default(0.0)
+  week4          Float    @default(0.0)
+  week5          Float    @default(0.0)
+  totalCompleted Float    @default(0.0)
+  workingDays    Int      @default(0)
   completedAverage Float @default(0.0)
   attendedAverage  Float @default(0.0)
   completedConversion Float @default(0.0)
@@ -53,16 +55,16 @@ model InstallDetail {
   report          MonthlyReport @relation(fields: [reportId], references: [id])
 
   // Material Details
-  stand           Int   @default(0)
-  standFixing     Int   @default(0)
-  copperPipe      Float @default(0.0)
-  copperPipeFixing Float @default(0.0)
-  cottonRoll      Int   @default(0)
-  stabilizer      Int   @default(0)
+  stand           Float   @default(0.0)
+  standFixing     Float   @default(0.0)
+  copperPipe      Float   @default(0.0)
+  copperPipeFixing Float   @default(0.0)
+  cottonRoll      Float   @default(0.0)
+  stabilizer      Float   @default(0.0)
   
   // Target
-  amcTarget       Int   @default(0)
-  amcAchieved     Int   @default(0)
+  amcTarget       Float   @default(0.0)
+  amcAchieved     Float   @default(0.0)
   
   // Call Breakdown
   installCount    Int   @default(0)
@@ -79,4 +81,40 @@ model ServiceCategoryBreakdown {
   inWarranty   Int           @default(0)
   outWarranty  Int           @default(0)
   total        Int           @default(0)
+}
+
+model InstallMonthlySummary {
+  id           Int      @id @default(autoincrement())
+  month        String
+  year         Int
+  installQty   Int      @default(0)
+  reinstallQty Int      @default(0)
+  dismantleQty Int      @default(0)
+
+  // Report Headers & Titles
+  table1Title  String?
+  table2Title  String?
+  table3Title  String?
+  headers      Json?    // Stores object like { t1: string[], t2: string[], t3: string[], t3Rows: string[] }
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([month, year])
+}
+
+model ServiceMonthlySummary {
+  id            Int      @id @default(autoincrement())
+  month         String
+  year          Int
+  
+  // Report Headers & Titles
+  table1Title   String?
+  categoryTitle String?
+  headers       Json?    // Stores object like { t1: string[] }
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([month, year])
 }
