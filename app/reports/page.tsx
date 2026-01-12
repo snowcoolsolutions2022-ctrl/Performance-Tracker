@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useCallback } from 'react';
-import { Download, Calendar, Search } from 'lucide-react';
+import { Download, Calendar, Search, FileDown } from 'lucide-react';
 import { getConsolidatedReport, InstallDataEntry, ServiceDataEntry, CategoryData } from '../actions';
+import { exportToExcel } from '../utils/exportToExcel';
 
 const MONTHS = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -75,6 +76,25 @@ export default function ReportsPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDownload = () => {
+        if (serviceData.length === 0 && installData.length === 0) return;
+
+        let fileName = 'Performance_Report';
+        if (filterMode === 'month') {
+            fileName += `_${selectedMonth}_${selectedYear}`;
+        } else {
+            fileName += `_${startMonth.slice(0, 3)}${startYear}_to_${endMonth.slice(0, 3)}${endYear}`;
+        }
+        fileName += '.xlsx';
+
+        exportToExcel({
+            serviceData,
+            installData,
+            categoryData,
+            fileName
+        });
     };
 
     return (
@@ -176,6 +196,17 @@ export default function ReportsPage() {
                             title="Generate Report"
                         >
                             <Search size={20} />
+                        </button>
+
+                        <div className="w-px h-8 bg-slate-800 mx-2"></div>
+
+                        <button
+                            onClick={handleDownload}
+                            disabled={loading || (serviceData.length === 0 && installData.length === 0)}
+                            className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-lg transition-colors disabled:opacity-50 disabled:bg-slate-800 disabled:text-slate-600"
+                            title="Download Excel Report"
+                        >
+                            <FileDown size={20} />
                         </button>
                     </div>
                 </div>
