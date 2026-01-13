@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Save, Calendar, Plus, Trash2 } from 'lucide-react';
 import { saveInstallReport, getInstallReport, InstallDataEntry } from '../../actions';
 
+export const dynamic = 'force-dynamic';
+
+
 interface ReportHeaders {
     t1?: string[];
     t2?: string[];

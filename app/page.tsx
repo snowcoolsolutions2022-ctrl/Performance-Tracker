@@ -5,6 +5,9 @@ import { ArrowUpRight, Users, CheckCircle, AlertCircle, Wrench, Zap, Package, Ac
 import { getDashboardStats } from './actions';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from 'recharts';
 
+export const dynamic = 'force-dynamic';
+
+
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'

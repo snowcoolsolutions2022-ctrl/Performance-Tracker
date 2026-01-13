@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Save, Calendar, Plus, Trash2 } from 'lucide-react';
 import { saveServiceReport, getServiceReport, ServiceDataEntry, CategoryData } from '../../actions';
 
+export const dynamic = 'force-dynamic';
+
+
 const DEFAULT_SERVICE_TECHS = [
     { name: 'JERIN', designation: 'SERVICE TEAM' },
     { name: 'GOPINATH', designation: 'SERVICE TEAM' },

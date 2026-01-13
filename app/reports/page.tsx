@@ -5,6 +5,9 @@ import { Download, Calendar, Search, FileDown } from 'lucide-react';
 import { getConsolidatedReport, InstallDataEntry, ServiceDataEntry, CategoryData } from '../actions';
 import { exportToExcel } from '../utils/exportToExcel';
 
+export const dynamic = 'force-dynamic';
+
+
 const MONTHS = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
