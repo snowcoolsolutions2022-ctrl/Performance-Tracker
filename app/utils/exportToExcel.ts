@@ -1,15 +1,16 @@
 
 import * as XLSX from 'xlsx';
-import { InstallDataEntry, ServiceDataEntry, CategoryData } from '../actions';
+import { InstallDataEntry, ServiceDataEntry, CategoryData, InstallSummary } from '../types';
 
 interface ExportData {
     serviceData: ServiceDataEntry[];
     installData: InstallDataEntry[];
     categoryData: CategoryData[];
+    installSummary: InstallSummary | null;
     fileName: string;
 }
 
-export const exportToExcel = ({ serviceData, installData, categoryData, fileName }: ExportData) => {
+export const exportToExcel = ({ serviceData, installData, categoryData, installSummary, fileName }: ExportData) => {
     const workbook = XLSX.utils.book_new();
 
     // 1. Service Sheet
@@ -72,6 +73,17 @@ export const exportToExcel = ({ serviceData, installData, categoryData, fileName
         }));
         const installSheet = XLSX.utils.json_to_sheet(installSheetData);
         XLSX.utils.book_append_sheet(workbook, installSheet, 'Install Team');
+    }
+
+    // 4. Call Completion Details Sheet
+    if (installSummary) {
+        const summarySheetData = [
+            { 'S.NO': 1, 'CALL COMPLETION DETAILS': 'INSTALLATION', 'QTY': installSummary.installQty },
+            { 'S.NO': 2, 'CALL COMPLETION DETAILS': 'RE-INSTALL', 'QTY': installSummary.reinstallQty },
+            { 'S.NO': 3, 'CALL COMPLETION DETAILS': 'DISMANTLING', 'QTY': installSummary.dismantleQty }
+        ];
+        const summarySheet = XLSX.utils.json_to_sheet(summarySheetData);
+        XLSX.utils.book_append_sheet(workbook, summarySheet, 'Call Completion Details');
     }
 
     // Write file

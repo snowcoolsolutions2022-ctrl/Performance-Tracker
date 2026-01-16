@@ -3,37 +3,13 @@
 import prisma from '../prisma/prisma';
 import { Prisma } from '@prisma/client';
 
-export type InstallDataEntry = {
-    techName: string;
-    designation: string;
-    // Completion Details
-    allocatedCalls: number;
-    week1: number;
-    week2: number;
-    week3: number;
-    week4: number;
-    week5: number;
-    totalCompleted: number;
-    workingDays: number;
-    completedAverage: number;
-    pendingCalls: number;
-    // Material Details
-    stand: number;
-    standFixing: number;
-    copperPipe: number;
-    copperPipeFixing: number;
-    cottonRoll: number;
-    stabilizer: number;
-    amc: number;
-    noInstall: number;
-    dismantling: number;
-}
-
-export type MonthlySummaryData = {
-    install: number;
-    reinstall: number;
-    dismantling: number;
-}
+import {
+    InstallDataEntry,
+    ServiceDataEntry,
+    CategoryData,
+    InstallSummary,
+    MonthlySummaryData
+} from './types';
 
 export async function saveInstallReport(
     month: string,
@@ -293,27 +269,7 @@ export async function getInstallReport(month: string, year: number) {
 
 // SERVICE ACTIONS
 
-export type ServiceDataEntry = {
-    techName: string;
-    designation: string;
-    allocatedCalls: number;
-    week1: number;
-    week2: number;
-    week3: number;
-    week4: number;
-    week5: number;
-    totalCompleted: number;
-    workingDays: number;
-    completedAverage: number;
-    attendedAverage: number;
-}
 
-export type CategoryData = {
-    categoryName: string;
-    inWarranty: number;
-    outWarranty: number;
-    total: number;
-}
 
 export async function saveServiceReport(
     month: string,
@@ -720,7 +676,26 @@ export async function getConsolidatedReport(monthYears: { month: string, year: n
 
         const consolidatedCategories = Array.from(categoryMap.values());
 
-        return { success: true, installData, serviceData, categories: consolidatedCategories };
+        // Aggregate Install Summary
+        const summaries = await prisma.installMonthlySummary.findMany({
+            where: {
+                OR: orConditions
+            }
+        });
+
+        const installSummary: InstallSummary = {
+            installQty: 0,
+            reinstallQty: 0,
+            dismantleQty: 0
+        };
+
+        summaries.forEach(s => {
+            installSummary.installQty += s.installQty;
+            installSummary.reinstallQty += s.reinstallQty;
+            installSummary.dismantleQty += s.dismantleQty;
+        });
+
+        return { success: true, installData, serviceData, categories: consolidatedCategories, installSummary };
 
     } catch (error) {
         console.error("Failed to get consolidated report:", error);

@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Save, Calendar, Plus, Trash2 } from 'lucide-react';
-import { saveServiceReport, getServiceReport, ServiceDataEntry, CategoryData } from '../../actions';
+import { saveServiceReport, getServiceReport } from '../../actions';
+import { ServiceDataEntry, CategoryData } from '../../types';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,7 @@ export default function ServiceEntryPage() {
 
 
     // --- EDITABLE STATE FOR HEADERS ---
-    const [table1Title, setTable1Title] = useState('DECEMBER MONTH - SERVICE TEAM REPORT');
+    const [table1Title, setTable1Title] = useState(`${month.toUpperCase()} MONTH - SERVICE TEAM REPORT`);
     const [categoryTitle, setCategoryTitle] = useState('CALL TYPE SUMMARY');
     const [t1Headers, setT1Headers] = useState([
         'Tech Name', 'ALLOCATED', '1 WEEK REPORT (1ST TO 7TH)', '2 WEEK REPORT (8TH TO 14TH)',
@@ -216,7 +217,7 @@ export default function ServiceEntryPage() {
                             onChange={(e) => setYear(Number(e.target.value))}
                             className="bg-transparent border-none text-slate-200 focus:ring-0 outline-none cursor-pointer"
                         >
-                            {Array.from({ length: new Date().getFullYear() - 2022 + 1 }, (_, i) => 2022 + i).map(y => (
+                            {Array.from({ length: 2030 - 2022 + 1 }, (_, i) => 2022 + i).map(y => (
                                 <option key={y} value={y} className="bg-slate-900 text-slate-200">{y}</option>
                             ))}
                         </select>

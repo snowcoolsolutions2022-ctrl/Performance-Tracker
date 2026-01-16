@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Save, Calendar, Plus, Trash2 } from 'lucide-react';
-import { saveInstallReport, getInstallReport, InstallDataEntry } from '../../actions';
+import { saveInstallReport, getInstallReport } from '../../actions';
+import { InstallDataEntry } from '../../types';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,9 +53,9 @@ export default function InstallEntryPage() {
     const [monthlySummary, setMonthlySummary] = useState({ install: 0, reinstall: 0, dismantling: 0 });
     const [summaryQtys, setSummaryQtys] = useState(['0', '0', '0']); // [Total, Target, Pending]
 
-    const [table1Title, setTable1Title] = useState('DECEMBER MONTH - 2025 INSTALLATION TECHNICIAN CALL COMPLETION DETAILS');
+    const [table1Title, setTable1Title] = useState(`${month.toUpperCase()} MONTH - ${year} INSTALLATION TECHNICIAN CALL COMPLETION DETAILS`);
     const [table2Title, setTable2Title] = useState('INSTALL TECHNICIAN MATERIAL DETAILS');
-    const [table3Title, setTable3Title] = useState('CALL COMPLETED DETAILS DEC 2025');
+    const [table3Title, setTable3Title] = useState(`CALL COMPLETED DETAILS ${month.slice(0, 3).toUpperCase()} ${year}`);
 
     const [t1Headers, setT1Headers] = useState([
         'TECH NAME', 'ALLOCATED CALLS',
@@ -292,7 +293,7 @@ export default function InstallEntryPage() {
                             onChange={(e) => setYear(Number(e.target.value))}
                             className="bg-transparent border-none text-slate-200 focus:ring-0 outline-none cursor-pointer"
                         >
-                            {Array.from({ length: new Date().getFullYear() - 2022 + 1 }, (_, i) => 2022 + i).map(y => (
+                            {Array.from({ length: 2030 - 2022 + 1 }, (_, i) => 2022 + i).map(y => (
                                 <option key={y} value={y} className="bg-slate-900 text-slate-200">{y}</option>
                             ))}
                         </select>

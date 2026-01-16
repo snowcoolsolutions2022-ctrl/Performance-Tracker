@@ -13,7 +13,7 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const YEARS = [2024, 2025, 2026, 2027];
+const YEARS = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
 type DashboardData = {
   kpi: {

@@ -2,7 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { Download, Calendar, Search, FileDown } from 'lucide-react';
-import { getConsolidatedReport, InstallDataEntry, ServiceDataEntry, CategoryData } from '../actions';
+import { getConsolidatedReport } from '../actions';
+import { InstallDataEntry, ServiceDataEntry, CategoryData, InstallSummary } from '../types';
 import { exportToExcel } from '../utils/exportToExcel';
 
 export const dynamic = 'force-dynamic';
@@ -30,6 +31,7 @@ export default function ReportsPage() {
     const [serviceData, setServiceData] = useState<ServiceDataEntry[]>([]);
     const [categoryData, setCategoryData] = useState<CategoryData[]>([]);
     const [installData, setInstallData] = useState<InstallDataEntry[]>([]);
+    const [installSummary, setInstallSummary] = useState<InstallSummary | null>(null);
 
     const generateReport = async () => {
         setLoading(true);
@@ -69,6 +71,7 @@ export default function ReportsPage() {
                 setServiceData(result.serviceData || []);
                 setCategoryData(result.categories || []);
                 setInstallData(result.installData || []);
+                setInstallSummary(result.installSummary || null);
             } else {
                 alert('Failed to load report: ' + result.error);
             }
@@ -96,6 +99,7 @@ export default function ReportsPage() {
             serviceData,
             installData,
             categoryData,
+            installSummary,
             fileName
         });
     };
@@ -146,7 +150,7 @@ export default function ReportsPage() {
                                     onChange={(e) => setSelectedYear(Number(e.target.value))}
                                     className="bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2 outline-none focus:border-blue-500"
                                 >
-                                    {[2022, 2023, 2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+                                    {[2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030].map(y => <option key={y} value={y}>{y}</option>)}
                                 </select>
                             </div>
                         ) : (
@@ -166,7 +170,7 @@ export default function ReportsPage() {
                                             onChange={(e) => setStartYear(Number(e.target.value))}
                                             className="bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-1.5 outline-none focus:border-blue-500"
                                         >
-                                            {[2022, 2023, 2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+                                            {[2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030].map(y => <option key={y} value={y}>{y}</option>)}
                                         </select>
                                     </div>
                                 </div>
@@ -185,7 +189,7 @@ export default function ReportsPage() {
                                             onChange={(e) => setEndYear(Number(e.target.value))}
                                             className="bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-1.5 outline-none focus:border-blue-500"
                                         >
-                                            {[2022, 2023, 2024, 2025, 2026, 2027].map(y => <option key={y} value={y}>{y}</option>)}
+                                            {[2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030].map(y => <option key={y} value={y}>{y}</option>)}
                                         </select>
                                     </div>
                                 </div>
@@ -389,6 +393,43 @@ export default function ReportsPage() {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </section>
+            )}
+
+            {/* CONSOLIDATED CALL COMPLETION DETAILS TABLE */}
+            {!loading && installSummary && (
+                <section className="max-w-xl">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-bold text-cyan-400">Call Completion Details</h3>
+                    </div>
+                    <div className="bg-[#0b1120] border border-slate-800 rounded-xl overflow-hidden">
+                        <table className="w-full text-sm text-left border-collapse">
+                            <thead className="bg-[#0b1120] text-emerald-400 uppercase font-bold text-xs">
+                                <tr>
+                                    <th className="p-4 border-r border-slate-800 border-b border-slate-800 w-20 text-center">S.NO</th>
+                                    <th className="p-4 border-r border-slate-800 border-b border-slate-800 text-center tracking-widest">CALL COMPLETION DETAILS</th>
+                                    <th className="p-4 border-b border-slate-800 w-24 text-center">QTY</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-slate-200">
+                                <tr className="border-b border-slate-800 hover:bg-slate-800/20 transition-colors">
+                                    <td className="p-4 border-r border-slate-800 text-center">1</td>
+                                    <td className="p-4 border-r border-slate-800 font-bold tracking-wider">INSTALLATION</td>
+                                    <td className="p-4 text-center font-bold text-emerald-400">{installSummary.installQty}</td>
+                                </tr>
+                                <tr className="border-b border-slate-800 hover:bg-slate-800/20 transition-colors">
+                                    <td className="p-4 border-r border-slate-800 text-center">2</td>
+                                    <td className="p-4 border-r border-slate-800 font-bold tracking-wider">RE-INSTALL</td>
+                                    <td className="p-4 text-center font-bold text-emerald-400">{installSummary.reinstallQty}</td>
+                                </tr>
+                                <tr className="hover:bg-slate-800/20 transition-colors">
+                                    <td className="p-4 border-r border-slate-800 text-center">3</td>
+                                    <td className="p-4 border-r border-slate-800 font-bold tracking-wider">DISMANTLING</td>
+                                    <td className="p-4 text-center font-bold text-emerald-400">{installSummary.dismantleQty}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
             )}
