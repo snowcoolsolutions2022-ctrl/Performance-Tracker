@@ -50,7 +50,7 @@ export default function InstallEntryPage() {
 
     // Summary & Metadata State
     const [monthlySummary, setMonthlySummary] = useState({ install: 0, reinstall: 0, dismantling: 0 });
-    const [summaryQtys, setSummaryQtys] = useState(['0', '17', '0']); // [Total, Target, Pending]
+    const [summaryQtys, setSummaryQtys] = useState(['0', '0', '0']); // [Total, Target, Pending]
 
     const [table1Title, setTable1Title] = useState('DECEMBER MONTH - 2025 INSTALLATION TECHNICIAN CALL COMPLETION DETAILS');
     const [table2Title, setTable2Title] = useState('INSTALL TECHNICIAN MATERIAL DETAILS');
@@ -76,7 +76,7 @@ export default function InstallEntryPage() {
         setIsLoading(true);
         // Reset to initial state immediately to avoid stale data
         setEntries(INITIAL_DATA);
-        setSummaryQtys(['0', '17', '0']);
+        setSummaryQtys(['0', '0', '0']);
 
         try {
             const result = await getInstallReport(month, year);
@@ -97,6 +97,11 @@ export default function InstallEntryPage() {
                 setEntries(updatedData);
                 if (result.summary) {
                     setMonthlySummary(result.summary);
+                    setSummaryQtys([
+                        result.summary.install.toString(),
+                        result.summary.reinstall.toString(),
+                        result.summary.dismantling.toString()
+                    ]);
                 }
                 if (result.metadata) {
                     setTable1Title(result.metadata.table1Title || 'DECEMBER MONTH - 2025 INSTALLATION TECHNICIAN CALL COMPLETION DETAILS');
@@ -163,10 +168,19 @@ export default function InstallEntryPage() {
     };
 
     const handleQtyChange = (index: number, val: string) => {
+        const numVal = parseInt(val) || 0;
         setSummaryQtys(prev => {
             const newArr = [...prev];
             newArr[index] = val;
             return newArr;
+        });
+
+        // Sync with monthlySummary for saving
+        setMonthlySummary(prev => {
+            if (index === 0) return { ...prev, install: numVal };
+            if (index === 1) return { ...prev, reinstall: numVal };
+            if (index === 2) return { ...prev, dismantling: numVal };
+            return prev;
         });
     };
 
